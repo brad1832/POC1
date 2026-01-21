@@ -7,32 +7,33 @@
     <groupId>com.example</groupId>
     <artifactId>spark-scala-app</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
 
     <properties>
         <spark.version>3.4.0</spark.version>
         <scala.version>2.12.17</scala.version>
-        <scala.binary.version>2.12</scala.binary.version>
+        <scala.compat.version>2.12</scala.compat.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <encoding>UTF-8</encoding>
     </properties>
 
     <dependencies>
         <!-- Spark Core Dependency -->
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_${scala.binary.version}</artifactId>
+            <artifactId>spark-core_${scala.compat.version}</artifactId>
             <version>${spark.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <!-- Spark SQL Dependency -->
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_${scala.binary.version}</artifactId>
+            <artifactId>spark-sql_${scala.compat.version}</artifactId>
             <version>${spark.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <!-- Scala Library Dependency -->
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -44,11 +45,11 @@
 
     <build>
         <plugins>
-            <!-- Scala Maven Plugin -->
+            <!-- Scala Compiler Plugin -->
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>4.8.1</version> <!-- Compatible with Scala 2.12 -->
+                <version>4.8.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -64,11 +65,23 @@
                     </args>
                 </configuration>
             </plugin>
+
+            <!-- Maven Compiler Plugin (for Java sources, if any) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
             <!-- Maven Shade Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.1</version> <!-- Latest stable version -->
+                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -87,6 +100,7 @@
                                     </excludes>
                                 </filter>
                             </filters>
+                            <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-shaded.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>
