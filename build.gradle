@@ -1,0 +1,21 @@
+```groovy
+plugins {
+    id 'scala'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spark SQL for Scala 2.12, version 3.4.0
+    // This dependency transitively brings in spark-core and scala-library 2.12.17
+    implementation 'org.apache.spark:spark-sql_2.12:3.4.0'
+}
+
+application {
+    // Replace with the fully qualified name of your main class
+    mainClass = 'com.example.SparkApp'
+}
+```
